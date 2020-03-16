@@ -64,18 +64,23 @@ const App = () => {
 
     const handlePersonUpdate = () => {
         if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-            showNotification(`Modified ${newName}`)
-
             const person = people.find(p => p.name.toLowerCase() === newName.toLowerCase())
             const updatedPerson = { ...person, number: newNumber }
             personService.update(updatedPerson)
                 .then(returnedPerson => {
                     setPeople(people.map(p => p.id !== person.id ? p : returnedPerson))
+                    showNotification(`Modified ${newName}`)
                     setNewName('')
                     setNewNumber('')
                 }).catch(error => {
-                    showNotification(`Information of ${newName} has already been removed from server`, false)
-                    setPeople(people.filter(p => p.id !== person.id))
+                    personService.get(person.id)
+                        .then(errorPerson => {
+                            console.log('Error editing person:', error.response.data.error)
+                            showNotification(error.response.data.error, false)
+                        }).catch(error => {
+                            showNotification(`Information of ${newName} has already been removed from server`, false)
+                            setPeople(people.filter(p => p.id !== person.id))
+                        })
                 })
         }
     }

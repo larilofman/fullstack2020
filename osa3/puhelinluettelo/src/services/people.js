@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'api/people'
+const baseUrl = 'api/persons'
 
 const getAll = () => {
     const req = axios.get(baseUrl)
@@ -7,6 +7,11 @@ const getAll = () => {
     return req.then(res => {
         return res.data
     })
+}
+
+const get = (id) => {
+    const req = axios.get(`${baseUrl}/${id}`)
+    return req.then(res => res.data)
 }
 
 const create = (newPerson) => {
@@ -24,4 +29,4 @@ const update = (person) => {
     return req.then(res => res.data)
 }
 
-export default { getAll, create, remove, update }
+export default { getAll, get, create, remove, update }
