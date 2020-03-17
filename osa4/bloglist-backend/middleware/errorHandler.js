@@ -1,7 +1,7 @@
 const errorHandler = (error, request, response, next) => {
 
     if (error.name === 'ValidationError') {
-        return response.status(400).send({ error: 'username already taken' })
+        return response.status(400).send({ error: error.message })
     }
     else if (error.name === 'JsonWebTokenError') {
         return response.status(401).send({ error: 'invalid token' })
@@ -10,7 +10,7 @@ const errorHandler = (error, request, response, next) => {
         return response.status(400).send({ error: error.error })
     }
 
-    next(error)
+    // next(error)
 }
 
 module.exports = errorHandler
