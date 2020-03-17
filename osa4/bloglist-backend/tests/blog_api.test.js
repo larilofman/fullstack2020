@@ -239,7 +239,7 @@ describe('when there are initially some blogs saved', () => {
                 .expect(400)
                 .expect('Content-Type', /application\/json/)
 
-            expect(result.body.error).toContain('username already taken')
+            expect(result.body.error).toContain('unique')
 
             const usersAtEnd = await helper.usersInDb()
             expect(usersAtEnd.length).toBe(usersAtStart.length)
