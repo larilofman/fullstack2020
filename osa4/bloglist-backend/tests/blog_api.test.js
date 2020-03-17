@@ -174,7 +174,7 @@ describe('when there are initially some blogs saved', () => {
     describe('when there is initially one user in db', () => {
         beforeEach(async () => {
             await User.deleteMany({})
-            user = new User({ username: 'takenUser', name: 'Taken Name', passwordHash: 'k31n0t3k01n3np455uh45h' })
+            const user = new User({ username: 'takenUser', name: 'Taken Name', passwordHash: 'k31n0t3k01n3np455uh45h' })
             await user.save()
         })
 
