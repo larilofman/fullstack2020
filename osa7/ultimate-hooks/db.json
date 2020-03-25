@@ -1,0 +1,51 @@
+{
+  "notes": [
+    {
+      "content": "custom-hookit aivan mahtavia",
+      "id": 1
+    },
+    {
+      "content": "paras feature ikinä <3",
+      "id": 2
+    },
+    {
+      "content": "testinote",
+      "id": 3
+    },
+    {
+      "content": "testinote2",
+      "id": 4
+    },
+    {
+      "content": "testinot3",
+      "id": 5
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "testi nimi",
+      "number": "123-456-7890",
+      "id": 2
+    },
+    {
+      "name": "person two",
+      "number": "66666",
+      "id": 3
+    },
+    {
+      "name": "john doe",
+      "number": "45456546",
+      "id": 4
+    },
+    {
+      "name": "hillary",
+      "number": "89894323",
+      "id": 5
+    }
+  ]
+}
