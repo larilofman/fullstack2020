@@ -2,6 +2,7 @@ import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 describe('<Blog />', () => {
     let user0
@@ -22,7 +23,8 @@ describe('<Blog />', () => {
             author: 'Test Author',
             url: 'https://www.test.com',
             likes: 13,
-            user: user0
+            user: user0,
+            id: 666
         }
     })
 
@@ -30,12 +32,19 @@ describe('<Blog />', () => {
         const mockHandler = jest.fn()
 
         const component = render(
-            <Blog
-                blog={blog}
-                onLike={mockHandler}
-                onRemove={mockHandler}
-                loggedUser={user1}
-            />
+            <Router>
+                <table>
+                    <tbody>
+                        <Blog
+                            blog={blog}
+                            onLike={mockHandler}
+                            onRemove={mockHandler}
+                            loggedUser={user1}
+                        />
+                    </tbody>
+                </table>
+
+            </Router>
         )
 
         expect(component.container).toHaveTextContent(
@@ -46,48 +55,8 @@ describe('<Blog />', () => {
             'Test Author'
         )
 
-        const toggledDiv = component.container.querySelector('.blogFull')
-
-        expect(toggledDiv).toHaveStyle('display: none')
-    })
-
-    test('renders url and likes after toggled on', () => {
-        const mockHandler = jest.fn()
-
-        const component = render(
-            <Blog
-                blog={blog}
-                onLike={mockHandler}
-                onRemove={mockHandler}
-                loggedUser={user1}
-            />
+        expect(component.container).not.toHaveTextContent(
+            'https://www.test.com'
         )
-
-        const divButton = component.container.querySelector('.blog')
-        fireEvent.click(divButton)
-
-        const toggledDiv = component.container.querySelector('.blogFull')
-
-        expect(toggledDiv).not.toHaveStyle('display: none')
-    })
-
-    test('calls onLike proper amount of times', () => {
-        const mockLikeHandler = jest.fn()
-        const mockRemoveHandler = jest.fn()
-
-        const component = render(
-            <Blog
-                blog={blog}
-                onLike={mockLikeHandler}
-                onRemove={mockRemoveHandler}
-                loggedUser={user1}
-            />
-        )
-
-        const likeButton = component.getByText('Like')
-        fireEvent.click(likeButton)
-        fireEvent.click(likeButton)
-
-        expect(mockLikeHandler.mock.calls.length).toBe(2)
     })
 })
