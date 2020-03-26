@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { loginUser } from '../reducers/userReducer'
 import { showNotification, hideNotification } from '../reducers/notificationReducer'
 import { useHistory } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
 
 
 const LoginForm = (props) => {
@@ -25,33 +26,35 @@ const LoginForm = (props) => {
     }
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form id="login-form" onSubmit={handleLogin}>
-                <div>
-                    <label htmlFor="username">Username </label>
-                    <input
+        <div className="form-responsive">
+            <h2 className="mb-3">Login</h2>
+            <Form id="login-form" onSubmit={handleLogin}>
+                <Form.Group>
+                    <Form.Label htmlFor="username">Username </Form.Label>
+                    <Form.Control
                         id="username"
                         type="text"
                         value={username}
                         name="username"
                         onChange={({ target }) => setUsername(target.value)}
+                        className="mb-2"
                     />
-                </div>
-                <div>
-                    <label htmlFor="password">Password </label>
-                    <input
+                    <Form.Label htmlFor="password">Password </Form.Label>
+                    <Form.Control
                         id="password"
                         type="password"
                         value={password}
                         name="password"
                         onChange={({ target }) => setPassword(target.value)}
+                        className="mb-2"
                     />
-                </div>
-                <button type="submit">Login</button>
-            </form>
-
-        </div>
+                    <Button
+                        variant="primary"
+                        type="submit"
+                        className="mt-2">Login</Button>
+                </Form.Group>
+            </Form>
+        </div >
     )
 }
 

@@ -1,11 +1,12 @@
 import React from 'react'
+import { Button } from 'react-bootstrap'
 
 const AddComment = ({ onComment }) => {
 
     return (
         <form onSubmit={onComment}>
             <input type="text" name="comment" />
-            <button type="submit">Add comment</button>
+            <Button className="m-2" type="submit">Add comment</Button>
         </form>
     )
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { Button, Form } from 'react-bootstrap'
 
 const CreateBlog = ({ onSubmit }) => {
     const [title, setTitle] = useState('')
@@ -15,41 +16,37 @@ const CreateBlog = ({ onSubmit }) => {
     }
 
     return (
-        <div>
-            <h2>Create new</h2>
-            <form onSubmit={createBlog}>
-                <div>
-                    <label htmlFor="title">Title </label>
-                    <input
+        <div className="form-responsive">
+            <h2 className="mb-3">Create new</h2>
+            <Form onSubmit={createBlog}>
+                <Form.Group>
+                    <Form.Label htmlFor="title">Title </Form.Label >
+                    <Form.Control
                         id="title"
                         type="text"
                         value={title}
                         name="title"
                         onChange={({ target }) => setTitle(target.value)}
                     />
-                </div>
-                <div>
-                    <label htmlFor="author">Author </label>
-                    <input
+                    <Form.Label htmlFor="author">Author </Form.Label>
+                    <Form.Control
                         id="author"
                         type="text"
                         value={author}
                         name="author"
                         onChange={({ target }) => setAuthor(target.value)}
                     />
-                </div>
-                <div>
-                    <label htmlFor="url">Url </label>
-                    <input
+                    <Form.Label htmlFor="url">Url </Form.Label>
+                    <Form.Control
                         id="url"
                         type="text"
                         value={url}
                         name="url"
                         onChange={({ target }) => setUrl(target.value)}
                     />
-                </div>
-                <button id="createBlogButton" type="submit">Create</button>
-            </form>
+                    <Button id="createBlogButton" className="mt-3" type="submit">Create</Button>
+                </Form.Group>
+            </Form>
         </div>
     )
 }

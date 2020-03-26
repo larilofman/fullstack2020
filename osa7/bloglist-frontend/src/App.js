@@ -10,6 +10,8 @@ import { initializeBlogs } from './reducers/blogReducer'
 import { setUser } from './reducers/userReducer'
 import LoginForm from './components/LoginForm'
 import { Switch, Route, Redirect } from 'react-router-dom'
+import Footer from './components/Footer'
+import './style/App.css'
 
 
 const App = () => {
@@ -21,32 +23,39 @@ const App = () => {
     }, [dispatch])
 
     return (
-        <div>
+        <>
             <NavBar />
-            <h2>Blogs</h2>
-            <Notification />
+            <div className="container mb-4">
+                <div className="notification-container">
+                    <Notification />
+                </div>
 
-            <Switch>
-                <Route path="/users/:id">
-                    <UserPage />
-                </Route>
-                <Route path="/users">
-                    <UserList />
-                </Route>
-                <Route path="/blogs/:id">
-                    <BlogPage />
-                </Route>
-                <Route path="/blogs">
-                    <BlogList />
-                </Route>
-                <Route path="/login">
-                    <LoginForm />
-                </Route>
-                <Route path="/">
-                    <Redirect to="/blogs" />
-                </Route>
-            </Switch>
-        </div>
+                <main role="main" className="flex-shrink-0">
+                    <Switch>
+                        <Route path="/users/:id">
+                            <UserPage />
+                        </Route>
+                        <Route path="/users">
+                            <UserList />
+                        </Route>
+                        <Route path="/blogs/:id">
+                            <BlogPage />
+                        </Route>
+                        <Route path="/blogs">
+                            <BlogList />
+                        </Route>
+                        <Route path="/login">
+                            <LoginForm />
+                        </Route>
+                        <Route path="/">
+                            <Redirect to="/blogs" />
+                        </Route>
+                    </Switch>
+
+                </main>
+            </div>
+            <Footer />
+        </>
 
     )
 }

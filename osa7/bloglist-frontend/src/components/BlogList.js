@@ -5,6 +5,7 @@ import { showNotification } from '../reducers/notificationReducer'
 import Blog from './Blog'
 import CreateBlog from './CreateBlog'
 import { createBlog } from '../reducers/blogReducer'
+import { Table } from 'react-bootstrap'
 
 const BlogList = () => {
     const dispatch = useDispatch()
@@ -18,19 +19,34 @@ const BlogList = () => {
 
     return (
         <div>
-            {user
-                ? <Togglable buttonLabel={'New blog'}>
+            <h2 className="mb-4">Blogs</h2>
+
+
+            {user ?
+
+                <Togglable buttonLabel={'New blog'}>
                     <CreateBlog onSubmit={handleCreateNew} />
                 </Togglable>
+
                 : <p>Login to add blogs</p>}
 
+            <hr />
             <div id="blog-container">
-                {blogs.map(blog =>
-                    <Blog key={blog.id} blog={blog} />
-                )}
+                <Table striped>
+                    <tbody>
+                        <tr>
+                            <th>Blog</th>
+                            <th>Author</th>
+                        </tr>
+                        {blogs.map(blog =>
+                            <Blog key={blog.id} blog={blog} />
+                        )}
+                    </tbody>
+                </Table>
+
             </div>
 
-        </div>
+        </div >
     )
 }
 
