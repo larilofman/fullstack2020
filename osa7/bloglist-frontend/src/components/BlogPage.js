@@ -76,7 +76,7 @@ const BlogPage = () => {
                     <Modal.Title>{`Remove blog ${blog.title} by ${blog.author} ?`}</Modal.Title>
                 </Modal.Header>
                 <Modal.Footer style={{ borderTop: "none" }}>
-                    <Button variant="danger" onClick={handleRemoveBlog}>
+                    <Button id="remove-button" variant="danger" onClick={handleRemoveBlog}>
                         Remove
                     </Button>
                     <Button variant="secondary" onClick={() => setShowModal(false)}>

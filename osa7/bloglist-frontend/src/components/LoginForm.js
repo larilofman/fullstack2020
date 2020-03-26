@@ -49,6 +49,7 @@ const LoginForm = (props) => {
                         className="mb-2"
                     />
                     <Button
+                        id="login-button"
                         variant="primary"
                         type="submit"
                         className="mt-2">Login</Button>

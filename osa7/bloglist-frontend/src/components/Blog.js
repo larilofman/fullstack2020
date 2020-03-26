@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 const Blog = ({ blog }) => {
     return (
-        <tr>
+        <tr className="blog">
             <td>
                 <Link to={`blogs/${blog.id}`}>{`${blog.title}`}</Link>
             </td>

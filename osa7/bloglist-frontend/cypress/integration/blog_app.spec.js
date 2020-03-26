@@ -17,29 +17,32 @@ describe('Blog app', function () {
     })
 
     it('Login form is shown', function () {
+        cy.contains('Login').click()
         cy.get('#login-form')
     })
 
     describe('Login', function () {
+        beforeEach(function () {
+            cy.contains('Login').click()
+        })
         it('succeeds with correct credentials', function () {
             cy.get('#username').type('coco')
             cy.get('#password').type('passu1')
-            cy.get('button').click()
+            cy.get('#login-button').click()
 
-            cy.contains('Lari Löfman logged in')
+            cy.contains('Logout user Lari Löfman')
         })
 
         it('fails with wrong credentials', function () {
             cy.get('#username').type('coco')
             cy.get('#password').type('vääräpassu1')
-            cy.get('button').click()
+            cy.get('#login-button').click()
 
             cy.contains('Wrong username or password.')
-            cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)')
         })
     })
 
-    describe.only('When logged in', function () {
+    describe('When logged in', function () {
         beforeEach(function () {
             cy.login({ username: 'coco', password: 'passu1' })
         })
@@ -54,6 +57,8 @@ describe('Blog app', function () {
 
             cy.get('#blog-container')
                 .contains('Title by cypress')
+
+            cy.get('#blog-container')
                 .contains('Author by cypress')
         })
 
@@ -66,20 +71,17 @@ describe('Blog app', function () {
 
             it('A blog can be liked', function () {
                 cy.contains('Title2').click()
-                    .parent().contains('Like').click()
+                cy.contains('Like').click()
                     .parent().contains('14 likes')
             })
 
-            it.only('Blogs are sorted by likes in descending order', function () {
-                cy.contains('Title1').click()
-                cy.contains('Title2').click()
-                cy.contains('Title3').click()
+            it('Blogs are sorted by likes in descending order', function () {
 
                 cy.get('.blog')
                     .then((blogs) => {
-                        cy.wrap(blogs[0]).contains('85 likes')
-                        cy.wrap(blogs[1]).contains('13 likes')
-                        cy.wrap(blogs[2]).contains('7 likes')
+                        cy.wrap(blogs[0]).contains('Title3')
+                        cy.wrap(blogs[1]).contains('Title2')
+                        cy.wrap(blogs[2]).contains('Title1')
                     })
 
             })
@@ -92,7 +94,8 @@ describe('Blog app', function () {
 
             it('succeeds by right user', function () {
                 cy.contains('Delete Me').click()
-                    .parent().contains('Remove').click()
+                cy.contains('Remove').click()
+                cy.get('#remove-button').click()
 
                 cy.contains('Removed blog Delete Me by Author')
             })
