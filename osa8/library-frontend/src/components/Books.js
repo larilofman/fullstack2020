@@ -1,11 +1,34 @@
-import React, { useState } from 'react'
-import { useQuery } from '@apollo/client'
+import React, { useEffect, useState } from 'react'
+import { useLazyQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries'
 import { findGenres } from '../utils'
 
 const Books = (props) => {
+    const [books, setBooks] = useState([])
     const [filter, setFilter] = useState('')
-    const result = useQuery(ALL_BOOKS)
+    const [getBooks, result] = useLazyQuery(ALL_BOOKS)
+    const [allGenres, setAllGenres] = useState([])
+
+    // set books to show when data from backend arrives
+    useEffect(() => {
+        if (result.data) {
+            setBooks(result.data.allBooks)
+
+            // find all the different genres
+            if (!filter) {
+                setAllGenres(findGenres(result.data.allBooks))
+            }
+        }
+    }, [result]) // eslint-disable-line
+
+    // get data from backend when filter changes
+    useEffect(() => {
+        if (filter) {
+            getBooks({ variables: { genre: filter } })
+        } else {
+            getBooks()
+        }
+    }, [filter]) // eslint-disable-line
 
     if (!props.show) {
         return null
@@ -17,17 +40,9 @@ const Books = (props) => {
         )
     }
 
-    let books = result.data.allBooks
-
-    const allGenres = findGenres(books)
-
-    if (filter) {
-        books = books.filter(b => b.genres.includes(filter))
-    }
-
     return (
         <div>
-            <h2>{filter ? `books with the genre of ${filter}` : "all books"}</h2>
+            {filter ? <p>books with the genre of <strong>{filter}</strong></p> : <p>all books</p>}
 
             <table>
                 <tbody>
