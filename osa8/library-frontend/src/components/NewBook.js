@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries'
+import { updateCacheWithBook } from '../utils'
 
 const NewBook = (props) => {
     const [title, setTitle] = useState('')
@@ -10,63 +11,8 @@ const NewBook = (props) => {
     const [genres, setGenres] = useState([])
 
     const [addBook] = useMutation(ADD_BOOK, {
-        update: (client, response) => {
-            // add new book to cache
-            const bookData = client.readQuery({ query: ALL_BOOKS })
-
-            // query without genre
-            client.writeQuery({
-                query: ALL_BOOKS,
-                data: {
-                    allBooks: [...bookData.allBooks, response.data.addBook],
-                },
-            })
-
-            // query for each genre specified, is this actually be necessary?
-            response.data.addBook.genres.forEach(genre => {
-                const bookData = client.readQuery({ query: ALL_BOOKS, variables: { genre } })
-                client.writeQuery({
-                    query: ALL_BOOKS,
-                    variables: {
-                        genre
-                    },
-                    data: {
-                        allBooks: [...bookData.allBooks, response.data.addBook],
-                    },
-                })
-            });
-
-
-            // update author cache by incrementing book count or adding a new author
-            const authorName = response.data.addBook.author.name
-            const authorData = client.readQuery({ query: ALL_AUTHORS })
-            const author = authorData.allAuthors.find(a => a.name === authorName)
-
-            if (author) {
-                const editedAuthor = { ...author }
-                editedAuthor.bookCount++
-
-                client.writeQuery({
-                    query: ALL_AUTHORS,
-                    data: {
-                        allAuthors: authorData.allAuthors.map(a => a.name !== authorName ? a : editedAuthor)
-                    }
-                })
-            } else {
-                const newAuthor = {
-                    name: response.data.addBook.author.name,
-                    born: null,
-                    bookCount: 1
-                }
-
-                client.writeQuery({
-                    query: ALL_AUTHORS,
-                    data: {
-                        allAuthors: [...authorData.allAuthors, newAuthor]
-                    }
-                })
-            }
-
+        update: (cache, response) => {
+            updateCacheWithBook(cache, response.data.addBook)
         }
     })
 
