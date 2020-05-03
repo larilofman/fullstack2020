@@ -86,7 +86,7 @@ const PatientPage: React.FC = () => {
             />
             <Button onClick={() => openModal()}>Add Entry</Button>
             <Header as="h3">Entries</Header>
-            {patient.entries.length === 0
+            {!patient.entries || patient.entries.length === 0
                 ? <p>No entries.</p>
                 : patient.entries.map(e => <EntryDetails key={e.id} entry={e} />)
             }

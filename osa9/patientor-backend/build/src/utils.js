@@ -14,11 +14,11 @@ const parseString = (inputString, valueName) => {
 const isDate = (date) => {
     return Boolean(Date.parse(date));
 };
-const parseDoB = (dateOfBirth) => {
-    if (!dateOfBirth || !isString || !isDate(dateOfBirth)) {
-        throw new Error('Incorrect or missing date of birth: ' + dateOfBirth);
+const parseDate = (date) => {
+    if (!date || !isString || !isDate(date)) {
+        throw new Error('Incorrect or missing date: ' + date);
     }
-    return dateOfBirth;
+    return date;
 };
 const isGender = (param) => {
     return Object.values(types_1.Gender).includes(param);
@@ -32,10 +32,73 @@ const parseGender = (gender) => {
 const toNewPatient = (object) => {
     return {
         name: parseString(object.name, 'name'),
-        dateOfBirth: parseDoB(object.dateOfBirth),
+        dateOfBirth: parseDate(object.dateOfBirth),
         ssn: parseString(object.ssn, 'ssn'),
         gender: parseGender(object.gender),
         occupation: parseString(object.occupation, 'occupation')
     };
+};
+// Entry stuff
+const isEntryType = (param) => {
+    return Object.values(types_1.EntryType).includes(param);
+};
+const parseEntryType = (entry) => {
+    if (!entry || !isEntryType(entry)) {
+        throw new Error('Incorrect or missing entry type: ' + entry);
+    }
+    return entry;
+};
+const isHealthCheckRating = (param) => {
+    return Object.values(types_1.HealthCheckRating).includes(param);
+};
+const parseHealthCheckRating = (rating) => {
+    if (rating === undefined || !isHealthCheckRating(rating)) {
+        throw new Error('Incorrect or missing health check rating: ' + rating);
+    }
+    return rating;
+};
+const parseDischarge = (discharge) => {
+    if (!discharge || !parseDate(discharge.date) || !parseString(discharge.criteria, 'discharge criteria')) {
+        throw new Error('Incorrect or missing discharge: ' + discharge);
+    }
+    return discharge;
+};
+const assertNever = (value) => {
+    throw new Error(`Unhandled discriminated union member: ${JSON.stringify(value)}`);
+};
+exports.toNewEntry = (object) => {
+    const type = parseEntryType(object.type);
+    switch (type) {
+        case types_1.EntryType.HealthCheck:
+            return {
+                date: parseDate(object.date),
+                specialist: parseString(object.specialist, 'specialist'),
+                type,
+                diagnosisCodes: object.diagnosisCodes,
+                description: parseString(object.description, 'description'),
+                healthCheckRating: parseHealthCheckRating(object.healthCheckRating)
+            };
+        case types_1.EntryType.Hospital:
+            return {
+                date: parseDate(object.date),
+                specialist: parseString(object.specialist, 'specialist'),
+                type,
+                diagnosisCodes: object.diagnosisCodes,
+                description: parseString(object.description, 'description'),
+                discharge: parseDischarge(object.discharge)
+            };
+        case types_1.EntryType.OccupationalHealthcare:
+            return {
+                date: parseDate(object.date),
+                specialist: parseString(object.specialist, 'specialist'),
+                type,
+                diagnosisCodes: object.diagnosisCodes,
+                employerName: parseString(object.employerName, 'employer name'),
+                description: parseString(object.description, 'description'),
+                sickLeave: object.sickLeave
+            };
+        default:
+            return assertNever(type);
+    }
 };
 exports.default = toNewPatient;
